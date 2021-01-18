@@ -19,7 +19,7 @@
                     <h1 class="logoh1">파 송 송</h1>
                 </a>
             </div>
-            <form action="/findsong/index.php" method="GET">
+            <form action="/findsong/index.php" method="GET" class="search_form">
                 <select name="category">
                     <option value="title">제목</option>
                     <option value="artist">아티스트</option>
@@ -30,15 +30,17 @@
     </header>
     <div class="genre">
         <ul>
-            <li><input type="checkbox" name="genre" value="발라드">발라드</li>
-            <li><input type="checkbox" name="genre" value="댄스">댄스</li>
-            <li><input type="checkbox" name="genre" value="랩/힙합">랩/힙합</li>
-            <li><input type="checkbox" name="genre" value="R&B/Soul">R&B/Soul</li>
-            <li><input type="checkbox" name="genre" value="인디음악">인디음악</li>
-            <li><input type="checkbox" name="genre" value="록/메탈">록/메탈</li>
-            <li><input type="checkbox" name="genre" value="트로트">트로트</li>
-            <li><input type="checkbox" name="genre" value="포크/블루스">포크/블루스</li>
-            <li><button class="filter_btn" onclick="value_check()">필터 적용</button></li>
+            <form action="/findsong/index.php" method="GET">
+                <li><input type="radio" name="genre" value="발라드">발라드</li>
+                <li><input type="radio" name="genre" value="댄스">댄스</li>
+                <li><input type="radio" name="genre" value="랩/힙합">랩/힙합</li>
+                <li><input type="radio" name="genre" value="R&B/Soul">R&B/Soul</li>
+                <li><input type="radio" name="genre" value="인디음악">인디음악</li>
+                <li><input type="radio" name="genre" value="록/메탈">록/메탈</li>
+                <li><input type="radio" name="genre" value="트로트">트로트</li>
+                <li><input type="radio" name="genre" value="포크/블루스">포크/블루스</li>
+                <li><button class="filter_btn" type="submit">필터 적용</button></li>
+            </form>
         </ul>
     </div>
     <div class="main">
@@ -60,11 +62,17 @@
             else
                 $page = 1;
             // 테이블에서 id를 기준으로 내림차순해서 5개까지 표시
+            if(isset($_GET['genre']))
+                $result = $_GET['genre'];
             if(isset($_GET['search'])) {
                 $category = $_GET['category'];
                 $search_con = $_GET['search']; ?>
                 <h1>'<?php echo $search_con; ?>' 검색결과</h1><?php
                 $sql = mq("select * from songDB where $category like '%$search_con%' order by idx");
+            }
+            else if(isset($result)) { ?>
+                <h1>'<?php echo $result; ?>' 검색결과</h1><?php
+                $sql = mq("select * from songDB where genre like '$result' order by idx");
             }
             else {
                 $sql = mq("select * from songDB");
@@ -83,6 +91,9 @@
             $start_num = ($page - 1) * $list;
             if(isset($_GET['search'])) {
                 $sql2 = mq("select * from songDB where $category like '%$search_con%' order by idx limit $start_num, $list");
+            }
+            else if(isset($result)) {
+                $sql2 = mq("select * from songDB where genre like '$result' order by idx limit $start_num, $list");
             }
             else {
                 $sql2 = mq("select * from songDB order by idx limit $start_num, $list");

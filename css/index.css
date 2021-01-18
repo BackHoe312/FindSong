@@ -49,17 +49,17 @@ button{
 	border-radius: 10%;
     cursor: pointer;
 }
-form {
+.search_form {
 	margin-left: 700px;
 	margin-top: -30px;
 }
-form button {
+.search_form button {
 	height: 31px;
 }
-form input {
+.search_form input {
 	height: 27px;
 }
-form select {
+.search_form select {
 	height: 30px;
 }
 .genre{

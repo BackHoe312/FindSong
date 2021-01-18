@@ -15,7 +15,16 @@ a {
 ul li {
     list-style: none;
 }
-
+th {
+    border: solid black 1px;
+}
+.main {
+    margin-left: 27%;
+}
+.filter_btn {
+    width: 80px;
+    margin-left: 1130px;
+}
 /* 공통 */
 .fl {
     float: left;

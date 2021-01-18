@@ -5,25 +5,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" type="text/css" href="/findsong/styles.css" />
-    <link rel="stylesheet" type="text/css" href="/findsong/filter.css" />
-    <script>
-        function value_check() {
-            var check_count = document.getElementsByName("genre").length;
-
-            <?php $arr = array(
-            for (var i = 0; i < check_count; i++) {
-                if (document.getElementsByName("genre")[i].checked == true) {
-                        <script>document.getElementByName("genre")[i];</script>
-                    )
-                }
-            }
-            ?>
-    }
-    <?php echo $arr['발라드'] ?>
-</script>
+    <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="./css/filter.css" />
+    <link rel="stylesheet" type="text/css" href="./css/index.css" />
+    
 </head>
 <body>
+    <header>
+        <div class="header">
+            <div class="logo">
+                <a href="/findsong/index.php">
+                    <h1>Find Song Song</h1>
+                    <h1 class="logoh1">파 송 송</h1>
+                </a>
+            </div>
+            <form action="/findsong/index.php" method="GET">
+                <select name="category">
+                    <option value="title">제목</option>
+                    <option value="artist">아티스트</option>
+                </select>
+                <input type="text" name="search" size="40" required="required" /> <button>검색</button>
+            </form>
+        </div>
+    </header>
     <div class="genre">
         <ul>
             <li><input type="checkbox" name="genre" value="발라드">발라드</li>
@@ -34,13 +38,14 @@
             <li><input type="checkbox" name="genre" value="록/메탈">록/메탈</li>
             <li><input type="checkbox" name="genre" value="트로트">트로트</li>
             <li><input type="checkbox" name="genre" value="포크/블루스">포크/블루스</li>
-            <li><button onclick="value_check()">필터 적용</button></li>
+            <li><button class="filter_btn" onclick="value_check()">필터 적용</button></li>
         </ul>
     </div>
+    <div class="main">
     <table class="list">
         <thead>
             <tr>
-                <th width="50">이미지</th>
+                <th width="120">이미지</th>
                 <th width="150">제목</th>
                 <th width="150">아티스트</th>
                 <th width="50">시간</th>
@@ -55,7 +60,15 @@
             else
                 $page = 1;
             // 테이블에서 id를 기준으로 내림차순해서 5개까지 표시
-            $sql = mq("select * from songDB");
+            if(isset($_GET['search'])) {
+                $category = $_GET['category'];
+                $search_con = $_GET['search']; ?>
+                <h1>'<?php echo $search_con; ?>' 검색결과</h1><?php
+                $sql = mq("select * from songDB where $category like '%$search_con%' order by idx");
+            }
+            else {
+                $sql = mq("select * from songDB");
+            }
             $row_num = mysqli_num_rows($sql);
             $list = 5;
             $block_ct = 5;
@@ -68,24 +81,32 @@
             if($block_end > $total_page) $block_end = $total_page; // 만약 블록의 마지막 번호가 페이지 수보다 많다면 마지막 번호는 페이지 수
             $total_block = ceil($total_page / $block_ct);
             $start_num = ($page - 1) * $list;
-
-            $sql2 = mq("select * from songDB order by idx limit $start_num, $list");
+            if(isset($_GET['search'])) {
+                $sql2 = mq("select * from songDB where $category like '%$search_con%' order by idx limit $start_num, $list");
+            }
+            else {
+                $sql2 = mq("select * from songDB order by idx limit $start_num, $list");
+            }           
 
             while($Slist = $sql2->fetch_array()) { // fetch_array() = 한 행식 패치하여 배열로 저장
             // 테이블에서 id를 기준으로 내림차순해서 5개까지 표시
-        ?>
+            // $time = date("i:s", timestamp($Slist['time']));
+    ?>
         <tbody>
                 <tr>
-                    <th width="150"><img src="./img/<?php echo $Slist['img'] ?>.jpg" style="width: 120px"></th>
+                    <th width="120"><img src="./img/<?php echo $Slist['img'] ?>.jpg" style="width: 120px"></th>
                     <th width="150"><?php echo $Slist['title'] ?></th>
                     <th width="150"><?php echo $Slist['artist']?></th>
-                    <th width="50"><?php echo $Slist['time'] ?></th>
+                    <th width="80"><?php echo $Slist['time'] ?></th>
                     <th width="100"><?php echo $Slist['date'] ?></th>
                     <th width="150"><?php echo $Slist['album'] ?></th>
-                    <th width="100"><?php echo $Slist['genre'] ?></th>
+                    <th width="100"><?php
+                        echo $Slist['genre']; ?><br><?php 
+                        if($Slist['genre2'] != '') 
+                            echo $Slist['genre2']; ?>
                 </tr>
         </tbody>
-        <?php   } ?>
+    <?php   } ?>
     </table>
     <div id="page_num">
             <ul>
@@ -122,6 +143,7 @@
 
                 ?>
             </ul>
-        </div>
+    </div>
+    </div>
 </body>
 </html>

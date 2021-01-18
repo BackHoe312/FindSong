@@ -7,8 +7,21 @@
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="/findsong/styles.css" />
     <link rel="stylesheet" type="text/css" href="/findsong/filter.css" />
-    
+    <script>
+        function value_check() {
+            var check_count = document.getElementsByName("genre").length;
 
+            <?php $arr = array(
+            for (var i = 0; i < check_count; i++) {
+                if (document.getElementsByName("genre")[i].checked == true) {
+                        <script>document.getElementByName("genre")[i];</script>
+                    )
+                }
+            }
+            ?>
+    }
+    <?php echo $arr['발라드'] ?>
+</script>
 </head>
 <body>
     <div class="genre">
@@ -42,7 +55,6 @@
             else
                 $page = 1;
             // 테이블에서 id를 기준으로 내림차순해서 5개까지 표시
-            // if()
             $sql = mq("select * from songDB");
             $row_num = mysqli_num_rows($sql);
             $list = 5;

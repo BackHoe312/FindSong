@@ -6,11 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="/findsong/styles.css" />
+    <link rel="stylesheet" type="text/css" href="/findsong/filter.css" />
+    
+
 </head>
 <body>
+    <div class="genre">
+        <ul>
+            <li><input type="checkbox" name="genre" value="발라드">발라드</li>
+            <li><input type="checkbox" name="genre" value="댄스">댄스</li>
+            <li><input type="checkbox" name="genre" value="랩/힙합">랩/힙합</li>
+            <li><input type="checkbox" name="genre" value="R&B/Soul">R&B/Soul</li>
+            <li><input type="checkbox" name="genre" value="인디음악">인디음악</li>
+            <li><input type="checkbox" name="genre" value="록/메탈">록/메탈</li>
+            <li><input type="checkbox" name="genre" value="트로트">트로트</li>
+            <li><input type="checkbox" name="genre" value="포크/블루스">포크/블루스</li>
+            <li><button onclick="value_check()">필터 적용</button></li>
+        </ul>
+    </div>
     <table class="list">
         <thead>
             <tr>
+                <th width="50">이미지</th>
                 <th width="150">제목</th>
                 <th width="150">아티스트</th>
                 <th width="50">시간</th>
@@ -25,6 +42,7 @@
             else
                 $page = 1;
             // 테이블에서 id를 기준으로 내림차순해서 5개까지 표시
+            // if()
             $sql = mq("select * from songDB");
             $row_num = mysqli_num_rows($sql);
             $list = 5;
@@ -46,6 +64,7 @@
         ?>
         <tbody>
                 <tr>
+                    <th width="150"><img src="./img/<?php echo $Slist['img'] ?>.jpg" style="width: 120px"></th>
                     <th width="150"><?php echo $Slist['title'] ?></th>
                     <th width="150"><?php echo $Slist['artist']?></th>
                     <th width="50"><?php echo $Slist['time'] ?></th>
